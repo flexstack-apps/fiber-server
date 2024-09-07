@@ -3,15 +3,20 @@ package main
 import (
 	"context"
 	"fmt"
-	"log"
+	"os"
 	"os/signal"
 	"syscall"
 	"time"
 
-	"app/internal/environment"
 	"app/internal/logger"
+	"app/internal/mw"
+
 	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v2/middleware/favicon"
+	"github.com/gofiber/fiber/v2/middleware/healthcheck"
+	"github.com/gofiber/fiber/v2/middleware/helmet"
 	fiberrecover "github.com/gofiber/fiber/v2/middleware/recover"
+	"github.com/gofiber/fiber/v2/middleware/requestid"
 	"github.com/segmentio/encoding/json"
 	"golang.org/x/sync/errgroup"
 )
@@ -23,52 +28,50 @@ func main() {
 
 	cfg, err := LoadConfig()
 	if err != nil {
-		log.Fatalf("failed to load config %v", err)
+		panic(err)
 	}
 
 	log := logger.New(logger.Options{
 		LogLevel: cfg.LogLevel,
-		Pretty:   cfg.Environment == environment.Development,
-	}).With("service", "receiver")
-
-	g := errgroup.Group{}
-	srv := fiber.New(fiber.Config{
-		StrictRouting: true,
-		Network:       "tcp",
-		JSONEncoder:   json.Marshal,
-		JSONDecoder:   json.Unmarshal,
+		Pretty:   cfg.Environment == "development",
 	})
 
-	srv.Use(fiberrecover.New(fiberrecover.Config{EnableStackTrace: cfg.Environment == environment.Development}))
-	// if cfg.Environment == environment.Development {
-	// 	srv.Use(flogger.New(flogger.Config{}))
-	// }
-	srv.Get("/", func(c *fiber.Ctx) error {
+	app := fiber.New(fiber.Config{
+		StrictRouting:      true,
+		Network:            "tcp",
+		EnableIPValidation: true,
+		JSONEncoder:        json.Marshal,
+		JSONDecoder:        json.Unmarshal,
+	})
+	app.Use(mw.NewRealIP())
+	app.Use(helmet.New(helmet.Config{HSTSPreloadEnabled: true, HSTSMaxAge: 31536000}))
+	app.Use(fiberrecover.New(fiberrecover.Config{EnableStackTrace: cfg.Environment == "devleopment"}))
+	app.Use(favicon.New())
+	app.Use(requestid.New())
+	app.Use(healthcheck.New(healthcheck.Config{LivenessEndpoint: "/healthz"}))
+	app.Use(mw.NewLogger(log.With("source", "server")))
+	app.Get("/", func(c *fiber.Ctx) error {
 		c.Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
 		c.Set("Pragma", "no-cache")
 		return c.Send([]byte("{\"ok\": true}"))
 	})
-	srv.Get("/health", func(c *fiber.Ctx) error {
-		c.Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-		c.Set("Pragma", "no-cache")
-		c.Set("Content-Type", "text/plain")
-		return c.SendString(".")
-	})
 
-	srvShutdown := errgroup.Group{}
-	srvShutdown.Go(func() error {
-		<-ctx.Done()
-		log.Info("shutting down")
-		if err := srv.ShutdownWithTimeout(time.Second * 5); err != nil {
-			log.Error(fmt.Sprintf("shutdown: %s\n", err))
+	g := errgroup.Group{}
+
+	g.Go(func() error {
+		if err := app.Listen(":" + cfg.Port); err != nil {
 			return err
 		}
-		log.Info("successfully shut down")
+
 		return nil
 	})
 
-	g.Go(func() error {
-		if err := srv.Listen(":" + cfg.Port); err != nil {
+	sg := errgroup.Group{}
+	sg.Go(func() error {
+		<-ctx.Done()
+
+		if err := app.ShutdownWithTimeout(time.Second * 5); err != nil {
+			log.Error(fmt.Sprintf("shutdown: %s\n", err))
 			return err
 		}
 
@@ -77,10 +80,10 @@ func main() {
 
 	if err := g.Wait(); err != nil {
 		log.Error("error", "error", err)
-		stop()
+		os.Exit(1)
 	}
 
-	if err := srvShutdown.Wait(); err != nil {
+	if err := sg.Wait(); err != nil {
 		log.Error(fmt.Sprintf("shutdown: %s\n", err))
 	}
 

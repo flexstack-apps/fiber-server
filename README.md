@@ -16,23 +16,22 @@ curl https://mise.run | sh
 ```
 
 2. Add mise shims to your shell profile and source it. This will activate mise in your shell
-and add shims to your path so they can be used in non-interactive places like IDEs.
+   and add shims to your path so they can be used in non-interactive places like IDEs.
 
 ```sh
 # Zsh
 echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
-echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> ~/.zprofile
+echo 'eval "$(~/.local/bin/mise activate zsh --shims)"' >> ~/.zprofile
 source ~/.zshrc
 
 # Bash 
 echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
-echo 'export PATH="$HOME/.local/share/mise/shims:$PATH"' >> ~/.bash_profile
+echo 'eval "$(~/.local/bin/mise activate bash --shims)"' >> ~/.bash_profile
 source ~/.bashrc
 
 # Fish
 echo '~/.local/bin/mise activate fish | source' >> ~/.config/fish/config.fish
 fish_add_path ~/.local/share/
-set -Ua
 ```
 
 3. Run `mise trust` to trust the project's `.mise.toml` file. This will allow mise to manage the project's tool versions and environment variables.
@@ -42,6 +41,7 @@ set -Ua
 1. Clone the repository
 1. Run `mise install` to install the project tool dependencies
 1. Run `mise run setup` to setup the project
+1. Run `mise run` to start the server in development mode
 
 ### Scripts
 

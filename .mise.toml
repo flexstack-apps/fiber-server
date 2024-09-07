@@ -4,11 +4,7 @@
 [tools]
 go = "1.23.1"
 dprint = "0.47.2"
-
-[settings]
-experimental = true
-asdf_compat = true
-yes = true
+watchexec = "2.1.2"
 
 [tasks."setup"]
 description = "Setup the project"
@@ -16,6 +12,23 @@ run = [
   "go mod download",
   "go mod tidy",
 ]
+sources = ["go.mod", ".mise.toml", "*/**/*.go"]
+outputs = ["go.sum"]
+
+[tasks."default"]
+hide = true
+depends = ["dev"]
+
+[tasks."dev"]
+description = "Run the project in development mode"
+run = "mise watch -t serve -r"
+
+[tasks."serve"]
+description = "Run the project in development mode"
+run = "go run ./cmd/server"
+sources = ["go.mod", "*/**/*.go"]
+# Waiting for: https://github.com/jdx/mise/issues/2526
+# depends = ["setup"]
 
 [tasks."format"]
 description = "Format files in the project"
@@ -32,3 +45,8 @@ run = "dprint check"
 [tasks."check:vet"]
 description = "Run go vet"
 run = "go vet ./..."
+
+[settings]
+experimental = true
+asdf_compat = true
+yes = true
