@@ -1,0 +1,34 @@
+# [[env]]
+# _.file = ".env"
+
+[tools]
+go = "1.23.1"
+dprint = "0.47.2"
+
+[settings]
+experimental = true
+asdf_compat = true
+yes = true
+
+[tasks."setup"]
+description = "Setup the project"
+run = [
+  "go mod download",
+  "go mod tidy",
+]
+
+[tasks."format"]
+description = "Format files in the project"
+run = "dprint fmt"
+
+[tasks."test"]
+description = "Run tests"
+run = "go test ./..."
+
+[tasks."check:format"]
+description = "Check formatting"
+run = "dprint check"
+
+[tasks."check:vet"]
+description = "Run go vet"
+run = "go vet ./..."
