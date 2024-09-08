@@ -6,7 +6,7 @@ A Go Fiber web server with graceful exit, structured logging, environment variab
 
 ### Quick start
 
-See the [Prerequisites](#prerequisites) section for installing [`mise`](https://mise.jdx.dev/about.html).
+See the [Prerequisites](#prerequisites) section for installing [mise](https://mise.jdx.dev/about.html).
 
 ```sh
 # Install project dependencies
