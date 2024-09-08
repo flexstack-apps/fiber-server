@@ -1,16 +1,14 @@
-# [[env]]
-# _.file = ".env"
-
 [tools]
-go = "1.23.1"
 dprint = "0.47.2"
 watchexec = "2.1.2"
+go = "1.23.1"
 
 [tasks."setup"]
 description = "Setup the project"
 run = [
   "go mod download",
   "go mod tidy",
+  "mise reshim",
 ]
 sources = ["go.mod", ".mise.toml", "*/**/*.go"]
 outputs = ["go.sum"]
@@ -42,9 +40,9 @@ run = "go test ./..."
 description = "Check formatting"
 run = "dprint check"
 
-[tasks."check:vet"]
-description = "Run go vet"
-run = "go vet ./..."
+[tasks."check:lint"]
+description = "Check linting"
+run = "staticcheck ./..."
 
 [settings]
 experimental = true

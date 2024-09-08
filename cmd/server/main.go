@@ -8,16 +8,15 @@ import (
 	"syscall"
 	"time"
 
-	"app/internal/logger"
-	"app/internal/mw"
-
+	"github.com/_/_/internal/app/hello"
+	"github.com/_/_/internal/pkg/logger"
+	"github.com/_/_/internal/pkg/mw"
 	"github.com/gofiber/fiber/v2"
 	"github.com/gofiber/fiber/v2/middleware/favicon"
 	"github.com/gofiber/fiber/v2/middleware/healthcheck"
 	"github.com/gofiber/fiber/v2/middleware/helmet"
 	fiberrecover "github.com/gofiber/fiber/v2/middleware/recover"
 	"github.com/gofiber/fiber/v2/middleware/requestid"
-	"github.com/segmentio/encoding/json"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -40,8 +39,6 @@ func main() {
 		StrictRouting:      true,
 		Network:            "tcp",
 		EnableIPValidation: true,
-		JSONEncoder:        json.Marshal,
-		JSONDecoder:        json.Unmarshal,
 	})
 	app.Use(mw.NewRealIP())
 	app.Use(helmet.New(helmet.Config{HSTSPreloadEnabled: true, HSTSMaxAge: 31536000}))
@@ -50,10 +47,15 @@ func main() {
 	app.Use(requestid.New())
 	app.Use(healthcheck.New(healthcheck.Config{LivenessEndpoint: "/healthz"}))
 	app.Use(mw.NewLogger(log.With("source", "server")))
+
+	clientSvc := hello.New(hello.Options{Logger: log.With("source", "client")})
 	app.Get("/", func(c *fiber.Ctx) error {
-		c.Set("Cache-Control", "no-store, no-cache, must-revalidate, max-age=0")
-		c.Set("Pragma", "no-cache")
-		return c.Send([]byte("{\"ok\": true}"))
+		hello, err := clientSvc.Hello(mw.GetRealIP(c))
+		if err != nil {
+			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal Server Error"})
+		}
+
+		return c.JSON(hello)
 	})
 
 	g := errgroup.Group{}

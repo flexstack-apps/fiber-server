@@ -1,8 +1,7 @@
 package main
 
 import (
-	"app/internal/logger"
-
+	"github.com/_/_/internal/pkg/logger"
 	"github.com/caarlos0/env/v11"
 )
 

@@ -65,4 +65,3 @@ If you're using VS Code or Cursor as your editor, we recommend the following ext
 - [**TOML Language Support**](https://marketplace.visualstudio.com/items?itemName=be5invis.toml) Add TOML language support for the `mise` config.
 - [**Dprint Code Formatter**](https://marketplace.visualstudio.com/items?itemName=dprint.dprint) Use `dprint` as the default formatter for the project.
 - [**Go**](https://marketplace.visualstudio.com/items?itemName=golang.go) Golang support for VS Code
-
