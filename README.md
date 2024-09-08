@@ -11,8 +11,10 @@ See the [Prerequisites](#prerequisites) section for installing [mise](https://mi
 ```sh
 # Install project dependencies
 mise install
+
 # Setup the project
 mise run setup
+
 # Start the development server
 mise run
 ```
