@@ -6,17 +6,16 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/_/_/internal/app/hello"
 	"github.com/_/_/internal/pkg/logger"
 	"github.com/_/_/internal/pkg/mw"
-	"github.com/gofiber/fiber/v2"
-	"github.com/gofiber/fiber/v2/middleware/favicon"
-	"github.com/gofiber/fiber/v2/middleware/healthcheck"
-	"github.com/gofiber/fiber/v2/middleware/helmet"
-	fiberrecover "github.com/gofiber/fiber/v2/middleware/recover"
-	"github.com/gofiber/fiber/v2/middleware/requestid"
+	"github.com/gofiber/fiber/v3"
+	"github.com/gofiber/fiber/v3/middleware/favicon"
+	"github.com/gofiber/fiber/v3/middleware/healthcheck"
+	"github.com/gofiber/fiber/v3/middleware/helmet"
+	fiberrecover "github.com/gofiber/fiber/v3/middleware/recover"
+	"github.com/gofiber/fiber/v3/middleware/requestid"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -37,7 +36,6 @@ func main() {
 
 	app := fiber.New(fiber.Config{
 		StrictRouting:      true,
-		Network:            "tcp",
 		EnableIPValidation: true,
 	})
 	app.Use(mw.NewRealIP())
@@ -45,11 +43,11 @@ func main() {
 	app.Use(fiberrecover.New(fiberrecover.Config{EnableStackTrace: cfg.Environment == "devleopment"}))
 	app.Use(favicon.New())
 	app.Use(requestid.New())
-	app.Use(healthcheck.New(healthcheck.Config{LivenessEndpoint: "/healthz"}))
-	app.Use(mw.NewLogger(log.With("source", "server")))
+	serverLog := log.With("source", "server")
+	app.Use(mw.NewLogger(serverLog))
 
 	clientSvc := hello.New(hello.Options{Logger: log.With("source", "client")})
-	app.Get("/", func(c *fiber.Ctx) error {
+	app.Get("/", func(c fiber.Ctx) error {
 		hello, err := clientSvc.Hello(mw.GetRealIP(c))
 		if err != nil {
 			return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{"error": "Internal Server Error"})
@@ -57,23 +55,28 @@ func main() {
 
 		return c.JSON(hello)
 	})
+	app.Get(mw.HealthCheckEndpoint, healthcheck.NewHealthChecker())
 
 	g := errgroup.Group{}
 
 	g.Go(func() error {
-		if err := app.Listen(":" + cfg.Port); err != nil {
-			return err
+		addr := fmt.Sprintf("%s:%d", cfg.Host, cfg.Port)
+		listenConfig := fiber.ListenConfig{
+			GracefulContext:       ctx,
+			ListenerNetwork:       fiber.NetworkTCP,
+			DisableStartupMessage: true,
+			CertFile:              cfg.CertFile,
+			CertKeyFile:           cfg.CertKeyFile,
+			OnShutdownError: func(err error) {
+				serverLog.Error("error shutting down", "error", err)
+			},
+			OnShutdownSuccess: func() {
+				serverLog.Info("shutdown successfully")
+			},
 		}
 
-		return nil
-	})
-
-	sg := errgroup.Group{}
-	sg.Go(func() error {
-		<-ctx.Done()
-
-		if err := app.ShutdownWithTimeout(time.Second * 5); err != nil {
-			log.Error(fmt.Sprintf("shutdown: %s\n", err))
+		serverLog.Info("starting server", "address", addr, "environment", cfg.Environment, "url", cfg.URL)
+		if err := app.Listen(addr, listenConfig); err != nil {
 			return err
 		}
 
@@ -83,10 +86,6 @@ func main() {
 	if err := g.Wait(); err != nil {
 		log.Error("error", "error", err)
 		os.Exit(1)
-	}
-
-	if err := sg.Wait(); err != nil {
-		log.Error(fmt.Sprintf("shutdown: %s\n", err))
 	}
 
 	log.Info("exiting")

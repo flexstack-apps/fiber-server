@@ -5,12 +5,12 @@ import (
 	"log/slog"
 	"time"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
-func NewLogger(logger *slog.Logger) func(*fiber.Ctx) error {
-	return func(c *fiber.Ctx) error {
-		if c.Path() == "/healthz" {
+func NewLogger(logger *slog.Logger) func(fiber.Ctx) error {
+	return func(c fiber.Ctx) error {
+		if c.Path() == HealthCheckEndpoint {
 			return c.Next()
 		}
 
@@ -29,11 +29,12 @@ func NewLogger(logger *slog.Logger) func(*fiber.Ctx) error {
 	}
 }
 
-func GetLogger(c *fiber.Ctx) *slog.Logger {
+func GetLogger(c fiber.Ctx) *slog.Logger {
 	return c.Locals(LoggerKey).(*slog.Logger)
 }
 
 const (
 	// LoggerKey is the key used to store the logger in the context
-	LoggerKey = "logger"
+	LoggerKey           = "logger"
+	HealthCheckEndpoint = "/healthz"
 )

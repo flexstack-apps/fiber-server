@@ -5,7 +5,7 @@ import (
 	"net/http"
 	"strings"
 
-	"github.com/gofiber/fiber/v2"
+	"github.com/gofiber/fiber/v3"
 )
 
 var (
@@ -28,8 +28,8 @@ var (
 // you (in particular, the headers this middleware uses), for example
 // because you have placed a reverse proxy like HAProxy or nginx in front of
 // of the server.
-func NewRealIP() func(*fiber.Ctx) error {
-	return func(c *fiber.Ctx) error {
+func NewRealIP() func(fiber.Ctx) error {
+	return func(c fiber.Ctx) error {
 		if rip := realIP(c); rip != "" {
 			c.Locals(RealIPKey, rip)
 		} else {
@@ -39,7 +39,7 @@ func NewRealIP() func(*fiber.Ctx) error {
 	}
 }
 
-func realIP(c *fiber.Ctx) string {
+func realIP(c fiber.Ctx) string {
 	var ip string
 
 	if cip := c.Get(cloudfrontViewerAddress); cip != "" {
@@ -79,7 +79,7 @@ func realIP(c *fiber.Ctx) string {
 }
 
 // GetRealIP returns the real IP address stored in the context.
-func GetRealIP(c *fiber.Ctx) string {
+func GetRealIP(c fiber.Ctx) string {
 	ip, ok := c.Locals(RealIPKey).(string)
 	if !ok {
 		return c.IP()
