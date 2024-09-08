@@ -16,6 +16,7 @@ mise install
 mise run setup
 
 # Start the development server
+# By default: https://localhost:3000
 mise run
 ```
 
