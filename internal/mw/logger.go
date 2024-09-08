@@ -1,14 +1,14 @@
 package mw
 
 import (
-	"app/internal/logger"
 	"fmt"
+	"log/slog"
 	"time"
 
 	"github.com/gofiber/fiber/v2"
 )
 
-func NewLogger(logger *logger.Logger) func(*fiber.Ctx) error {
+func NewLogger(logger *slog.Logger) func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
 		if c.Path() == "/healthz" {
 			return c.Next()
@@ -29,8 +29,8 @@ func NewLogger(logger *logger.Logger) func(*fiber.Ctx) error {
 	}
 }
 
-func GetLogger(c *fiber.Ctx) *logger.Logger {
-	return c.Locals(LoggerKey).(*logger.Logger)
+func GetLogger(c *fiber.Ctx) *slog.Logger {
+	return c.Locals(LoggerKey).(*slog.Logger)
 }
 
 const (

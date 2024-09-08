@@ -4,6 +4,12 @@ A Go Fiber web server with graceful exit, structured logging, environment variab
 
 ## Local development
 
+### Quick start
+
+1. Run `mise install` to install the project tool dependencies
+1. Run `mise run setup` to setup the project
+1. Run `mise run` to start the server in development mode
+
 ### Prerequisites
 
 We use [mise](https://mise.jdx.dev/about.html) to run tasks and manage our tool version and environment variables.
@@ -36,13 +42,6 @@ fish_add_path ~/.local/share/
 
 3. Run `mise trust` to trust the project's `.mise.toml` file. This will allow mise to manage the project's tool versions and environment variables.
 
-### Setup the project
-
-1. Clone the repository
-1. Run `mise install` to install the project tool dependencies
-1. Run `mise run setup` to setup the project
-1. Run `mise run` to start the server in development mode
-
 ### Scripts
 
 We use `mise` as our [task runner](https://mise.jdx.dev/tasks/running-tasks.html).
@@ -50,10 +49,11 @@ We use `mise` as our [task runner](https://mise.jdx.dev/tasks/running-tasks.html
 1. To see a list of development scripts, run `mise tasks`.
 1. To run a script, run `mise run <script-name>`.
 
-### VSCode
+### VS Code and Cursor
 
-If you're using VSCode or Cursor as your editor, we recommend the following extensions:
+If you're using VS Code or Cursor as your editor, we recommend the following extensions:
 
 - [**TOML Language Support**](https://marketplace.visualstudio.com/items?itemName=be5invis.toml) Add TOML language support for the `mise` config.
 - [**Dprint Code Formatter**](https://marketplace.visualstudio.com/items?itemName=dprint.dprint) Use `dprint` as the default formatter for the project.
-- [**Go**](https://marketplace.visualstudio.com/items?itemName=golang.go) Golang support for VSCode
+- [**Go**](https://marketplace.visualstudio.com/items?itemName=golang.go) Golang support for VS Code
+

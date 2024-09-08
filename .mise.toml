@@ -20,11 +20,11 @@ hide = true
 depends = ["dev"]
 
 [tasks."dev"]
-description = "Run the project in development mode"
+description = "Run the server and watch for changes"
 run = "mise watch -t serve -r"
 
 [tasks."serve"]
-description = "Run the project in development mode"
+description = "Run the server"
 run = "go run ./cmd/server"
 sources = ["go.mod", "*/**/*.go"]
 # Waiting for: https://github.com/jdx/mise/issues/2526
@@ -34,8 +34,8 @@ sources = ["go.mod", "*/**/*.go"]
 description = "Format files in the project"
 run = "dprint fmt"
 
-[tasks."test"]
-description = "Run tests"
+[tasks."test:unit"]
+description = "Run unit tests"
 run = "go test ./..."
 
 [tasks."check:format"]

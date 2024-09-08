@@ -9,7 +9,7 @@ import (
 	"github.com/lmittmann/tint"
 )
 
-func New(opt Options, writers ...io.Writer) *Logger {
+func New(opt Options, writers ...io.Writer) *slog.Logger {
 	level := slog.LevelInfo
 
 	switch opt.LogLevel {
@@ -38,8 +38,6 @@ func New(opt Options, writers ...io.Writer) *Logger {
 
 	return slog.New(handler)
 }
-
-type Logger = slog.Logger
 
 type Options struct {
 	Pretty   bool
