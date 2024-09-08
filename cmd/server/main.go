@@ -76,7 +76,7 @@ func main() {
 		}
 
 		if cfg.Environment == "development" {
-			fmt.Println(startupLogo+"Open your browser and navigate to:", cfg.URL)
+			fmt.Println(startupLogo + cfg.URL)
 		} else {
 			serverLog.Info("starting server", "address", addr, "environment", cfg.Environment, "url", cfg.URL)
 		}
@@ -101,4 +101,4 @@ var startupLogo = `
  / __/ / / /_/ /  __/ /    
 /_/   /_/_.___/\___/_/       
 
-`
+ꕤ URL  `
