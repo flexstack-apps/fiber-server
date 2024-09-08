@@ -75,7 +75,12 @@ func main() {
 			},
 		}
 
-		serverLog.Info("starting server", "address", addr, "environment", cfg.Environment, "url", cfg.URL)
+		if cfg.Environment == "development" {
+			fmt.Println(startupLogo + cfg.URL)
+		} else {
+			serverLog.Info("starting server", "address", addr, "environment", cfg.Environment, "url", cfg.URL)
+		}
+
 		if err := app.Listen(addr, listenConfig); err != nil {
 			return err
 		}
@@ -87,6 +92,13 @@ func main() {
 		log.Error("error", "error", err)
 		os.Exit(1)
 	}
-
-	log.Info("exiting")
 }
+
+var startupLogo = `
+    _______ __
+   / ____(_) /_  ___  _____
+  / /_  / / __ \/ _ \/ ___/
+ / __/ / / /_/ /  __/ /    
+/_/   /_/_.___/\___/_/       
+
+ꕤ URL  `

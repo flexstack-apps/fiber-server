@@ -6,6 +6,7 @@ dprint = "0.47.2"
 watchexec = "2.1.2"
 go = "1.23.1"
 mkcert = "1.4.4"
+"go:honnef.co/go/tools/cmd/staticcheck" = "0.6.0-0.dev"
 
 [tasks."setup"]
 description = "Setup the project"
@@ -16,7 +17,7 @@ run = [
   "mise reshim",
   # Create certificates for localhost
   "mkcert -install",
-  "mkdir -p .ssh && mkcert -cert-file=.ssh/cert.pem -key-file=.ssh/cert-key.pem localhost 127.0.0.1 ::1",
+  "mkdir -p .ssh && mkcert -cert-file=.ssh/cert.pem -key-file=.ssh/cert-key.pem localhost 127.0.0.1 ::1 ${DOMAIN_NAME}",
 ]
 sources = ["go.mod", ".mise.toml", "*/**/*.go"]
 outputs = ["go.sum"]

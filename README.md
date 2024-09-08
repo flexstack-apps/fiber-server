@@ -16,6 +16,7 @@ mise install
 mise run setup
 
 # Start the development server
+# By default: https://localhost:3000
 mise run
 ```
 
@@ -65,3 +66,33 @@ If you're using VS Code or Cursor as your editor, we recommend the following ext
 - [**TOML Language Support**](https://marketplace.visualstudio.com/items?itemName=be5invis.toml) Add TOML language support for the `mise` config.
 - [**Dprint Code Formatter**](https://marketplace.visualstudio.com/items?itemName=dprint.dprint) Use `dprint` as the default formatter for the project.
 - [**Go**](https://marketplace.visualstudio.com/items?itemName=golang.go) Golang support for VS Code
+
+We also recommend the following settings in your `.vscode/settings.json`:
+
+```json
+{
+	"editor.defaultFormatter": "dprint.dprint",
+	"editor.formatOnSave": true,
+	"[go]": {
+		"editor.defaultFormatter": "dprint.dprint"
+	},
+	"[json]": {
+		"editor.defaultFormatter": "dprint.dprint"
+	},
+	"[jsonc]": {
+		"editor.defaultFormatter": "dprint.dprint"
+	},
+	"[yaml]": {
+		"editor.defaultFormatter": "dprint.dprint"
+	},
+	"[toml]": {
+		"editor.defaultFormatter": "dprint.dprint"
+	},
+	"[markdown]": {
+		"editor.defaultFormatter": "dprint.dprint"
+	},
+	"[dockerfile]": {
+		"editor.defaultFormatter": "dprint.dprint"
+	}
+}
+```
