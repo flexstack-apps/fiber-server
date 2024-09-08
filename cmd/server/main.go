@@ -31,7 +31,7 @@ func main() {
 
 	log := logger.New(logger.Options{
 		LogLevel: cfg.LogLevel,
-		Pretty:   cfg.Environment == "development",
+		Pretty:   cfg.Environment == EnvironmentDevelopment,
 	})
 
 	app := fiber.New(fiber.Config{
@@ -40,7 +40,7 @@ func main() {
 	})
 	app.Use(mw.NewRealIP())
 	app.Use(helmet.New(helmet.Config{HSTSPreloadEnabled: true, HSTSMaxAge: 31536000}))
-	app.Use(fiberrecover.New(fiberrecover.Config{EnableStackTrace: cfg.Environment == "devleopment"}))
+	app.Use(fiberrecover.New(fiberrecover.Config{EnableStackTrace: cfg.Environment == EnvironmentDevelopment}))
 	app.Use(favicon.New())
 	app.Use(requestid.New())
 	serverLog := log.With("source", "server")
@@ -75,10 +75,15 @@ func main() {
 			},
 		}
 
-		if cfg.Environment == "development" {
-			fmt.Println(startupLogo + cfg.URL)
+		if cfg.Environment == EnvironmentDevelopment {
+			proto := "http"
+			if cfg.CertFile != "" && cfg.CertKeyFile != "" {
+				proto = "https"
+			}
+
+			fmt.Println(startupLogo + fmt.Sprintf("%s://localhost:%d", proto, cfg.Port))
 		} else {
-			serverLog.Info("starting server", "address", addr, "environment", cfg.Environment, "url", cfg.URL)
+			serverLog.Info("starting server", "address", addr, "environment", cfg.Environment)
 		}
 
 		if err := app.Listen(addr, listenConfig); err != nil {
