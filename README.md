@@ -6,9 +6,16 @@ A Go Fiber web server with graceful exit, structured logging, environment variab
 
 ### Quick start
 
-1. Run `mise install` to install the project tool dependencies
-1. Run `mise run setup` to setup the project
-1. Run `mise run` to start the server in development mode
+See the [Prerequisites](#prerequisites) section for installing [`mise`](https://mise.jdx.dev/about.html).
+
+```sh
+# Install project dependencies
+mise install
+# Setup the project
+mise run setup
+# Start the development server
+mise run
+```
 
 ### Prerequisites
 
