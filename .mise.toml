@@ -32,10 +32,6 @@ sources = ["go.mod", "*/**/*.go"]
 description = "Format files in the project"
 run = "dprint fmt"
 
-[tasks."test:unit"]
-description = "Run unit tests"
-run = "go test ./..."
-
 [tasks."check:format"]
 description = "Check formatting"
 run = "dprint check"
@@ -44,7 +40,12 @@ run = "dprint check"
 description = "Check linting"
 run = "staticcheck ./..."
 
+[tasks."test:unit"]
+description = "Run unit tests"
+run = "go test ./..."
+
 [settings]
-experimental = true
+activate_aggressive = true
 asdf_compat = true
+experimental = true
 yes = true

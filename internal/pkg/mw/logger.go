@@ -10,7 +10,7 @@ import (
 
 func NewLogger(logger *slog.Logger) func(*fiber.Ctx) error {
 	return func(c *fiber.Ctx) error {
-		if c.Path() == "/healthzz" {
+		if c.Path() == "/healthz" {
 			return c.Next()
 		}
 
