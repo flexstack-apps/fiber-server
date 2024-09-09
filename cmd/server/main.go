@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"fmt"
+	"log/slog"
 	"os"
 	"os/signal"
 	"syscall"
@@ -44,7 +45,7 @@ func main() {
 	app.Use(favicon.New())
 	app.Use(requestid.New())
 	serverLog := log.With("source", "server")
-	app.Use(mw.NewLogger(serverLog))
+	app.Use(mw.NewLogger(serverLog, slog.LevelInfo))
 
 	clientSvc := hello.New(hello.Options{Logger: log.With("source", "client")})
 	app.Get("/", func(c fiber.Ctx) error {

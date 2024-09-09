@@ -8,7 +8,12 @@ import (
 	"github.com/gofiber/fiber/v3"
 )
 
-func NewLogger(logger *slog.Logger) func(fiber.Ctx) error {
+func NewLogger(logger *slog.Logger, level ...slog.Level) func(fiber.Ctx) error {
+	logLevel := slog.LevelInfo
+	if len(level) > 0 {
+		logLevel = level[0]
+	}
+
 	return func(c fiber.Ctx) error {
 		if c.Path() == HealthCheckEndpoint {
 			return c.Next()
@@ -19,12 +24,13 @@ func NewLogger(logger *slog.Logger) func(fiber.Ctx) error {
 			return err
 		}
 
-		logger.Info(
+		logger.Log(c.Context(), logLevel,
 			fmt.Sprintf("%s %s", c.Method(), c.Path()),
 			"status", c.Response().StatusCode(),
 			"ip", GetRealIP(c),
 			"duration", time.Since(c.Context().Time()).String(),
 		)
+
 		return nil
 	}
 }
