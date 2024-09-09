@@ -66,8 +66,8 @@ We also recommend the following settings in your `.vscode/settings.json`:
 
 ### Prerequisites
 
-We use [mise](https://mise.jdx.dev/about.html) to run tasks and manage our tool version and environment variables.
-This ensures that all developers and deployments are using the same versions of tools and dependencies.
+We use [mise](https://mise.jdx.dev/about.html) to run tasks, manage tool versions, 
+and manage environment variables.
 
 1. [Install mise](https://mise.jdx.dev/getting-started.html)
 
@@ -75,8 +75,7 @@ This ensures that all developers and deployments are using the same versions of 
 curl https://mise.run | sh
 ```
 
-2. Add mise shims to your shell profile and source it. This will activate mise in your shell
-   and add shims to your path so they can be used in non-interactive places like IDEs.
+2. Add mise to your shell profile. This activates mise in your shell, ensuring the correct tool versions are used for your environment.
 
 ```sh
 # Zsh
@@ -94,4 +93,4 @@ echo '~/.local/bin/mise activate fish | source' >> ~/.config/fish/config.fish
 fish_add_path ~/.local/share/
 ```
 
-3. Run `mise trust` to trust the project's `.mise.toml` file. This will allow mise to manage the project's tool versions and environment variables.
+3. Run `mise trust` to trust the project's `.mise.toml` file.
