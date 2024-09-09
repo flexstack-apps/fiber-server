@@ -15,19 +15,23 @@ run = [
   # Install dependencies
   "go mod download",
   "go mod tidy",
-  "mise reshim",
-  # Create certificates for localhost
+  # Create a local certificate authority
   "mkcert -install",
-  "mkdir -p .ssh && mkcert -cert-file=.ssh/cert.pem -key-file=.ssh/cert-key.pem localhost 127.0.0.1 ::1",
-  # Copy .env.template to .env if it doesn't exist
+  "mkdir -p .ssh",
+  # If you use a custom development domain, add your domain after
+  # `localhost` in the command below.
+  """
+    mkcert \
+      -cert-file=.ssh/cert.pem \
+      -key-file=.ssh/cert-key.pem \
+    localhost 127.0.0.1 ::1
+  """,
+  # Create a .env file from the .env.template file
+  # See https://github.com/flexstack/envtpl to do more with `envtpl`
   "envtpl .env.template -o .env",
 ]
 sources = ["go.mod", ".mise.toml", "*/**/*.go"]
 outputs = ["go.sum"]
-
-[tasks."default"]
-hide = true
-depends = ["dev"]
 
 [tasks."dev"]
 description = "Run the server and watch for changes"
@@ -55,6 +59,10 @@ run = "staticcheck ./..."
 [tasks."test:unit"]
 description = "Run unit tests"
 run = "go test ./..."
+
+[tasks."default"]
+hide = true
+depends = ["dev"]
 
 [settings]
 activate_aggressive = true
