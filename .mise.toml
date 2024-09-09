@@ -13,6 +13,7 @@ mkcert = "1.4.4"
 description = "Setup the project"
 run = [
   # Install dependencies
+  "mise install",
   "go mod download",
   "go mod tidy",
   # Create a local certificate authority

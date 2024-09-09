@@ -10,9 +10,6 @@ See [Prerequisites](#prerequisites) for installing [mise](https://mise.jdx.dev/a
 an all-in-one tool for managing project dependencies, environment variables, and running tasks.
 
 ```sh
-# Install project dependencies
-mise install
-
 # Setup the project
 mise run setup
 
