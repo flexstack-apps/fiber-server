@@ -6,7 +6,8 @@ A Go Fiber web server with graceful exit, structured logging, environment variab
 
 ### Quick start
 
-See the [Prerequisites](#prerequisites) section for installing [mise](https://mise.jdx.dev/about.html).
+See [Prerequisites](#prerequisites) for installing [mise](https://mise.jdx.dev/about.html) –
+an all-in-one tool for managing project dependencies, environment variables, and running tasks.
 
 ```sh
 # Install project dependencies
@@ -20,39 +21,7 @@ mise run setup
 mise run
 ```
 
-### Prerequisites
-
-We use [mise](https://mise.jdx.dev/about.html) to run tasks and manage our tool version and environment variables.
-This ensures that all developers and deployments are using the same versions of tools and dependencies.
-
-1. [Install mise](https://mise.jdx.dev/getting-started.html)
-
-```sh
-curl https://mise.run | sh
-```
-
-2. Add mise shims to your shell profile and source it. This will activate mise in your shell
-   and add shims to your path so they can be used in non-interactive places like IDEs.
-
-```sh
-# Zsh
-echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
-echo 'eval "$(~/.local/bin/mise activate zsh --shims)"' >> ~/.zprofile
-source ~/.zshrc
-
-# Bash 
-echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
-echo 'eval "$(~/.local/bin/mise activate bash --shims)"' >> ~/.bash_profile
-source ~/.bashrc
-
-# Fish
-echo '~/.local/bin/mise activate fish | source' >> ~/.config/fish/config.fish
-fish_add_path ~/.local/share/
-```
-
-3. Run `mise trust` to trust the project's `.mise.toml` file. This will allow mise to manage the project's tool versions and environment variables.
-
-### Scripts
+### Development scripts
 
 We use `mise` as our [task runner](https://mise.jdx.dev/tasks/running-tasks.html).
 
@@ -96,3 +65,35 @@ We also recommend the following settings in your `.vscode/settings.json`:
 	}
 }
 ```
+
+### Prerequisites
+
+We use [mise](https://mise.jdx.dev/about.html) to run tasks and manage our tool version and environment variables.
+This ensures that all developers and deployments are using the same versions of tools and dependencies.
+
+1. [Install mise](https://mise.jdx.dev/getting-started.html)
+
+```sh
+curl https://mise.run | sh
+```
+
+2. Add mise shims to your shell profile and source it. This will activate mise in your shell
+   and add shims to your path so they can be used in non-interactive places like IDEs.
+
+```sh
+# Zsh
+echo 'eval "$(~/.local/bin/mise activate zsh)"' >> ~/.zshrc
+echo 'eval "$(~/.local/bin/mise activate zsh --shims)"' >> ~/.zprofile
+source ~/.zshrc
+
+# Bash 
+echo 'eval "$(~/.local/bin/mise activate bash)"' >> ~/.bashrc
+echo 'eval "$(~/.local/bin/mise activate bash --shims)"' >> ~/.bash_profile
+source ~/.bashrc
+
+# Fish
+echo '~/.local/bin/mise activate fish | source' >> ~/.config/fish/config.fish
+fish_add_path ~/.local/share/
+```
+
+3. Run `mise trust` to trust the project's `.mise.toml` file. This will allow mise to manage the project's tool versions and environment variables.
