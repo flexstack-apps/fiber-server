@@ -66,7 +66,7 @@ We also recommend the following settings in your `.vscode/settings.json`:
 
 ### Prerequisites
 
-We use [mise](https://mise.jdx.dev/about.html) to run tasks, manage tool versions, 
+We use [mise](https://mise.jdx.dev/about.html) to run tasks, manage tool versions,
 and manage environment variables.
 
 1. [Install mise](https://mise.jdx.dev/getting-started.html)
