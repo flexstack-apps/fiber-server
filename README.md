@@ -23,10 +23,8 @@ mise run
 
 ### Development scripts
 
-We use `mise` as our [task runner](https://mise.jdx.dev/tasks/running-tasks.html).
-
-1. To see a list of development scripts, run `mise tasks`.
-1. To run a script, run `mise run <script-name>`.
+- To see a list of development scripts, run `mise tasks`.
+- To run a script, run `mise run <script-name>`.
 
 ### VS Code and Cursor
 
