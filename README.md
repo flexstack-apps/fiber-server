@@ -1,4 +1,4 @@
-# fiber-server
+# Go Fiber boilerplate
 
 A Go Fiber web server with graceful exit, structured logging, environment variable configuration, and local development tooling.
 
