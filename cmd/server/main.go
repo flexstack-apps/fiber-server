@@ -17,7 +17,7 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/helmet"
 	fiberrecover "github.com/gofiber/fiber/v3/middleware/recover"
 	"github.com/gofiber/fiber/v3/middleware/requestid"
-	_ "go.uber.org/automaxprocs"
+	"go.uber.org/automaxprocs/maxprocs"
 	"golang.org/x/sync/errgroup"
 )
 
@@ -99,6 +99,10 @@ func main() {
 		log.Error("error", "error", err)
 		os.Exit(1)
 	}
+}
+
+func init() {
+	maxprocs.Set()
 }
 
 var startupLogo = `
