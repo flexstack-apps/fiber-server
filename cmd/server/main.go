@@ -17,6 +17,7 @@ import (
 	"github.com/gofiber/fiber/v3/middleware/helmet"
 	fiberrecover "github.com/gofiber/fiber/v3/middleware/recover"
 	"github.com/gofiber/fiber/v3/middleware/requestid"
+	_ "go.uber.org/automaxprocs"
 	"golang.org/x/sync/errgroup"
 )
 
