@@ -6,7 +6,7 @@ A Go Fiber web server with graceful exit, structured logging, environment variab
 
 The easiest way to deploy your Go Fiber server to AWS is to use the [FlexStack Serverless Platform](https://flexstack.com/).
 
-<a href="https://flexstack.com/apps/fiber-server"><img src="https://flexstack.com/deploy-on-flexstack.svg" height=40 alt="Deploy on FlexStack"/></a>
+<a href="https://flexstack.com/deploy/fiber-server"><img src="https://flexstack.com/deploy-on-flexstack.svg" height=40 alt="Deploy on FlexStack"/></a>
 
 ## Local development
 
